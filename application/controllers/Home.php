@@ -43,6 +43,7 @@ function __construct(){
 	public function startride()
 	{
 		
+		
 		$this->load->view('startride');
 	}
 
