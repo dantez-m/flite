@@ -1,0 +1,64 @@
+body{
+    background-color: rgb(255, 255, 255);
+    color: white;
+}
+button{
+    border: none;
+}
+.cont--1{
+    position: relative;
+    display: none;
+}
+.col--1{
+    background-color: #000;
+    position: absolute;
+    left:20%;
+    top:15vh;
+    padding:20px;
+    border-radius: 4px 16px;
+    transform: translateX(-150%);
+    transition: all ease-in-out 700ms;
+    opacity: 0.2;
+}
+.col--1 .btnX{
+    position: absolute;
+    right:0;
+    top:0;
+    background-color: unset;
+    color:orangered;
+    font-size: 25px;
+}
+.col--1 .btnX:hover{
+    font-size: 20px;
+   
+}
+.col--1 .btnX:active{
+    border: none;
+    color: rgb(238, 1, 1);
+}
+form{
+    column-count: 2;
+    column-gap: 40px;
+}
+form input:active{
+    background-color: slategray;
+}
+@media(max-width:768px){
+ form{
+     column-count: auto;
+     column-gap: 20px;
+ }
+ 
+.col--1{
+   
+    position: relative;
+    left:0;
+    top:7vh;
+    padding:20px;
+}
+}
+/* classes for angular */
+
+input.ng-invalid{
+    background-color: slategray;
+}
