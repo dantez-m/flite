@@ -36,6 +36,7 @@
 
     }
 </style>
+
 <base href="<?=base_url()?>">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
@@ -43,6 +44,11 @@
     <!--<link rel="stylesheet" href="assets/css/bsadmin.css">-->
     <script src="assets/js/jqPro.js"></script>
     <script src="assets/js/jarvis.js"></script>
+    <script type="text/javascript">
+		var centreGot = false;
+	</script>
+    <?php echo $map['js']; ?>
+
 </head>
 <body>
 
@@ -59,7 +65,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="#">Profile</a>
-                    <a class="dropdown-item" href="#">Logout</a>
+                    <a class="dropdown-item" href="#" id="lout">Logout</a>
                 </div>
             </li>
         </ul>
@@ -67,7 +73,7 @@
 </nav>
 <div class="">
     <div class="container text-center" id="log" style="margin-top:20px">
-    <image src="assets/images/flexy.jpg"  height="100px" width="100px"  />  
+    <image id="fimage" src="assets/images/flexy.jpg"  height="100px" width="100px"  />  
     </div>
     <p id="mess" class="text-center"></p>
     <div class="content p-4">
@@ -119,6 +125,22 @@
     </div>
   </form>
   <button class="btn btn-primary" id="strt">Start Ride</button>
+  
+  <div class="row strt">
+  	<button class="btn btn-primary" id="bhome" style="display: none;">Home</button>
+	<h3 class="text-center">START RIDE</h3>
+<hr>
+	<div class="col-xs-7">
+		<label>Input Number To start</label><br>
+<input type="Number" id="sphone" name="" class="form-control">
+	</div>
+	<div class="col-xs-2">
+	</div>
+	<div class="col-xs-3">
+		<label>Action</label><br>
+		<button type="button" class="btn btn-success" id="startdr">Start</button>
+	</div>
+</div>
 <div id="main"></div>
 </div>
 </div>
@@ -180,7 +202,7 @@ data-dismiss="modal">Close
 		<button class="btn btn-primary" id="cp" style="width: 100%;display: none;">Confirm Payment</button>
 		
 	</div>
-	<div class="container">
+	<div class="container-fluid">
 		<div class="col-xs-6">
 				<button class="btn btn-warning " id="wa" style="width: 100%;display: none;">Wait</button>
 			</div>
@@ -207,7 +229,11 @@ data-dismiss="modal">Close
   			$('#mform').show();
     $('#rform').hide();
   		});
-
+$('#lout').click(function(){
+$('#mess').load('<?=base_url()?>Home/lout');
+$('#mform,#fimage').show();
+$('#main,#strt,.strt').hide();
+});
   		$('#rreg').click(function(){
     var fname=$('#fname').val();
     var phone=$('#phone').val();
@@ -233,7 +259,7 @@ data-dismiss="modal">Close
         if(re){
         	$('#rform').hide();
         	 $('#mess').html('');
-        $('#nav-list,#strt').show();
+        $('#nav-list,#strt,.strt').show();
 $('#main').load('<?=base_url()?>Home/home');
       }else{
         $('#mess').html('<b style="color:blue">Wrong Input Detected</b>'+re);          
@@ -265,9 +291,9 @@ $('#main').load('<?=base_url()?>Home/home');
         var re=data;
         
         if(re==1){
-        	$('#mform').hide();
+        	$('#mform,#fimage').hide();
         	 $('#mess').html('');
-        $('#nav-list,#strt').show();
+        $('#nav-list,#strt,.strt').show();
 $('#main').load('<?=base_url()?>Home/home');
       }else{
         $('#mess').html('<b style="color:blue">Invalid Details</b>');          
@@ -287,8 +313,8 @@ if($this->session->userdata('usname')==""){
 ?>
 <script type="text/javascript">
 
-$('#mform,#log').show();
-$('#strt').hide();
+$('#mform,#log,#fimage').show();
+$('#strt,#bhome,.strt').hide();
     
 
 </script>
@@ -299,7 +325,8 @@ $('#strt').hide();
 
 <script type="text/javascript">
 	$('#usm').html("<i class='fa fa-user'></i> <?php echo $this->session->userdata("usname");?>");
-$('#mform,#log').hide();
+	$('.strt').hide();
+$('#mform,#log,#fimage').hide();
 $('#nav-list,#strt').show();
 $('#main').load('<?=base_url()?>Home/home');
     
@@ -315,12 +342,12 @@ $('#main').load('<?=base_url()?>Home/home');
         $('#mform,#log').hide();
         var user=$('#user').val();
         var pass=$('#pass').val();
-        $('#nav-list,#strt').show();
+        $('#nav-list,#strt,.strt').show();
         $('#main').load('<?=base_url()?>Home/home');
     });
   </script>
   <script>
-/*	$(function(){
+	$(function(){
 		dialog.alert({
 			title: "INCOMING REQUEST",
 			message: "<h3>Name</h3><br>from<br><h4>Nakuru</h4>.",
@@ -334,7 +361,36 @@ $('#main').load('<?=base_url()?>Home/home');
 		});
 		return false;
 	});
-	*/
+	
+	$('#startdr').click(function(){
+		var client=$('#sphone').val();
+
+		if(client!=""){
+
+		 $.ajax({
+		
+      url: 'Home/startride',
+      type: 'post',
+      data: {
+        client:client
+      },
+      success: function (data) {
+        var re=data;
+        
+        if(re){
+        	
+      }else{
+       alert('Wrong Input Detected');          
+              }
+     },error:function(){
+        alert('Network Error');
+      }
+    });
+}else{
+	alert("Enter client number");
+}
+
+	});
 $('#ct').click(function(){
 			dialog.alert({
 			title: "Complete Trip",
@@ -342,7 +398,7 @@ $('#ct').click(function(){
 			animation: "fade",
 			callback: function(value){
 				$('#ct').hide();
-				$('#strt').hide();
+				$('#strt,.strt').hide();
 				$('#cp').show();
 		$('#main').load('<?=base_url()?>home/tripdet');
 				console.log(value);
@@ -367,7 +423,7 @@ $('#ct').click(function(){
 			animation: "fade",
 			callback: function(value){
 				$('#cp').hide();
-				$('#strt').show();
+				$('#strt,.strt').show();
 		$('#main').load('<?=base_url()?>home/home');
 				console.log(value);
 			}
@@ -375,9 +431,17 @@ $('#ct').click(function(){
 		})
 		$('#strt').click(function(){
 			$(this).hide();
-			$('#str').show();
+			$('#bhome').show();
+			$('#str,.strt').show();
 			$('#wa').show();
 			$('#main').load('<?=base_url()?>home/startride');
+		})
+		$('#bhome').click(function(){
+			$(this).hide();
+			$('#strt,.strt').show();
+			$('#str,.strt').hide();
+			$('#wa').hide();
+			$('#main').load('<?=base_url()?>home/home');
 		})
 		$('#str').click(function(){
 			$(this).hide();
@@ -392,7 +456,7 @@ $('#ct').click(function(){
 			animation: "fade",
 			callback: function(value){
 				$('#cpr').hide();
-				$('#strt').show();
+				$('#strt,.strt').show();
 		$('#main').load('<?=base_url()?>home/home');
 				console.log(value);
 			}

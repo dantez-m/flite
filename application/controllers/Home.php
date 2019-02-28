@@ -17,18 +17,79 @@ function __construct(){
         $this->load->library('form_validation');
         $this->load->helper('form');
         $this->load->helper('url');
+        $this->load->library('googlemaps');
          
   
 	}
 	public function index()
 	{
-		
-		$this->load->view('default/body');
+		$config = array();
+$config['center'] = 'auto';
+$config['zoom'] = '20';
+$config['onboundschanged'] = 'if (!centreGot) {
+	var mapCentre = map.getCenter();
+	marker_0.setOptions({
+		position: new google.maps.LatLng(mapCentre.lat(), mapCentre.lng()) 
+	});
+	var user="'.$this->session->userdata('usname').'";
+	var client="0704774870";
+	$.ajax({
+                        type: "POST",
+                        url: "Strip/save",
+                        data: {lon: mapCentre.lng(),lat:mapCentre.lat(),user:user,client:client},
+                        success: function (data) {
+                            // return success
+                           location.reload(true);
+                           },error:function(){
+                           	alert("Error occured ");
+                           }
+                    });
+}
+centreGot = true;';
+$this->googlemaps->initialize($config);
+   
+// set up the marker ready for positioning 
+// once we know the users location
+$marker = array();
+$this->googlemaps->add_marker($marker);
+$data['map'] = $this->googlemaps->create_map();
+		$this->load->view('default/body',$data);
 	}
 	public function home()
 	{
-		
-		$this->load->view('home');
+	
+$config = array();
+$config['center'] = 'auto';
+$config['zoom'] = '20';
+$config['onboundschanged'] = 'if (!centreGot) {
+	var mapCentre = map.getCenter();
+	marker_0.setOptions({
+		position: new google.maps.LatLng(mapCentre.lat(), mapCentre.lng()) 
+	});
+	var user="'.$this->session->userdata('usname').'";
+	var client="0704774870";
+	$.ajax({
+                        type: "POST",
+                        url: "Strip/save",
+                        data: {lon: mapCentre.lng(),lat:mapCentre.lat(),user:user,client:client},
+                        success: function (data) {
+                            // return success
+                           location.reload(true);
+                           },error:function(){
+                           	alert("Error occured ");
+                           }
+                    });
+}
+centreGot = true;';
+$this->googlemaps->initialize($config);
+   
+// set up the marker ready for positioning 
+// once we know the users location
+$marker = array();
+$this->googlemaps->add_marker($marker);
+$data['map'] = $this->googlemaps->create_map();
+
+		$this->load->view('home',$data);
 	}
 	public function request()
 	{
@@ -42,8 +103,32 @@ function __construct(){
 	}
 	public function startride()
 	{
-		
-		
+		$client = $this->input->post('client');
+		$this->load->library('googlemaps');
+
+$config = array();
+$config['center'] = 'auto';
+$config['onboundschanged'] = 'if (!centreGot) {
+	var mapCentre = map.getCenter();
+	marker_0.setOptions({
+		position: new google.maps.LatLng(mapCentre.lat(), mapCentre.lng()) 
+	});
+	var user="'.$this->session->userdata('usname').'";
+	var client="'.$client.'";
+	$.ajax({
+                        type: "POST",
+                        url: "Strip/save",
+                        data: {lon: mapCentre.lng(),lat:mapCentre.lat(),user:user,client:client},
+                        success: function (data) {
+                            // return success
+                           location.reload(true);
+                           },error:function(){
+                           	alert("Error occured ");
+                           }
+                    });
+}
+centreGot = true;';
+$this->googlemaps->initialize($config);
 		$this->load->view('startride');
 	}
 
@@ -58,6 +143,11 @@ function __construct(){
 		    } else {
 				echo false;
 			}
+	}
+
+	public function lout(){
+		$this->session->set_userdata('usname');
+		echo "Enter details to login";
 	}
 
 	public function reg(){

@@ -1,6 +1,8 @@
 
-<h3 class="text-center">START RIDE</h3>
-<hr>
+
+
+
+<br>
 <div class="row">
 	<div class="col-xs-4">
 		<image src="assets/images/flexy.jpg"  height="100px" width="100px"  />  

@@ -1,7 +1,7 @@
 <div class="row">
 	
 	<div id="map">
-		<h1>Hello</h1>
+		<?php echo $map['html']; ?>
 	</div>
 	<div id="trips">
 		
